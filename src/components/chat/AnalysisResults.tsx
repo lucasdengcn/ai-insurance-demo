@@ -12,8 +12,10 @@ import {
   YAxis,
 } from "recharts";
 
+import { AnalysisResult } from "../../lib/models/ChatMessage";
+
 interface AnalysisResultsProps {
-  results: any; // TODO: Define proper type for analysis results
+  results: AnalysisResult | null;
 }
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
@@ -27,20 +29,18 @@ export function AnalysisResults({ results }: AnalysisResultsProps) {
     );
   }
 
-  // Sample data structure - replace with actual data from backend
-  const sampleData = {
-    coverageDistribution: [
-      { name: "Health", value: 35 },
-      { name: "Life", value: 25 },
-      { name: "Property", value: 20 },
-      { name: "Auto", value: 20 },
-    ],
-    riskAssessment: [
-      { category: "Financial", score: 85 },
-      { category: "Health", score: 72 },
-      { category: "Liability", score: 68 },
-      { category: "Property", score: 90 },
-    ],
+  const coverageData = results.coverageDistribution;
+  const riskData = results.riskAssessment;
+
+  const chartData = {
+    coverageDistribution: Object.entries(coverageData).map(([name, value]) => ({
+      name,
+      value,
+    })),
+    riskAssessment: Object.entries(riskData).map(([category, score]) => ({
+      category,
+      score,
+    })),
   };
 
   return (
@@ -53,7 +53,7 @@ export function AnalysisResults({ results }: AnalysisResultsProps) {
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
-                data={sampleData.coverageDistribution}
+                data={chartData.coverageDistribution}
                 cx="50%"
                 cy="50%"
                 labelLine={false}
@@ -62,7 +62,7 @@ export function AnalysisResults({ results }: AnalysisResultsProps) {
                 fill="#8884d8"
                 dataKey="value"
               >
-                {sampleData.coverageDistribution.map((entry, index) => (
+                {chartData.coverageDistribution.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
@@ -77,7 +77,7 @@ export function AnalysisResults({ results }: AnalysisResultsProps) {
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
-              data={sampleData.riskAssessment}
+              data={chartData.riskAssessment}
               margin={{
                 top: 5,
                 right: 30,

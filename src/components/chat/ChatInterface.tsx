@@ -6,8 +6,6 @@ import { useChatStore } from "@/lib/store/chatStore";
 import { ChatHistory } from "./ChatHistory";
 
 export default function ChatInterface() {
-  const selectedFile = useChatStore((state) => state.selectedFile);
-  const isAnalyzing = useChatStore((state) => state.isAnalyzing);
   const analysisResults = useChatStore((state) => state.analysisResults);
 
   return (

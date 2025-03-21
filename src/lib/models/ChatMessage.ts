@@ -9,6 +9,12 @@ export interface AnalysisResult {
   summary: string;
   recommendations: string[];
   riskLevel: "low" | "medium" | "high";
+  coverageDistribution: {
+    [name: string]: number;
+  };
+  riskAssessment: {
+    [category: string]: number;
+  };
 }
 
 export class ChatMessageModel implements ChatMessage {
@@ -47,11 +53,15 @@ export class AnalysisResultModel implements AnalysisResult {
   summary: string;
   recommendations: string[];
   riskLevel: "low" | "medium" | "high";
+  coverageDistribution: { [name: string]: number };
+  riskAssessment: { [category: string]: number };
 
   constructor(data: AnalysisResult) {
     this.summary = data.summary;
     this.recommendations = data.recommendations;
     this.riskLevel = data.riskLevel;
+    this.coverageDistribution = data.coverageDistribution;
+    this.riskAssessment = data.riskAssessment;
   }
 
   static validate(data: Partial<AnalysisResult>): boolean {
@@ -68,6 +78,8 @@ export class AnalysisResultModel implements AnalysisResult {
       summary: this.summary,
       recommendations: this.recommendations,
       riskLevel: this.riskLevel,
+      coverageDistribution: this.coverageDistribution,
+      riskAssessment: this.riskAssessment,
     };
   }
 }

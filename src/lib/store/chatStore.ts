@@ -1,33 +1,27 @@
 import { create } from "zustand";
 
-interface Message {
-  type: "user" | "assistant";
-  message: string;
-}
-
-interface AnalysisResult {
-  result: string;
-  score: number;
-}
+import { AnalysisResult, ChatMessage, ChatMessageModel } from "../models/ChatMessage";
 
 interface ChatState {
-  messages: Message[];
+  messages: ChatMessage[];
   selectedFile: File | null;
   isAnalyzing: boolean;
   analysisResults: AnalysisResult | null;
-  addMessage: (message: Message) => void;
+  addMessage: (message: ChatMessage) => void;
   setSelectedFile: (file: File | null) => void;
   setIsAnalyzing: (isAnalyzing: boolean) => void;
-  setAnalysisResults: (results: AnalysisResult) => void;
+  setAnalysisResults: (results: AnalysisResult | null) => void;
   reset: () => void;
 }
 
 const initialState = {
   messages: [
-    {
-      type: "assistant",
-      message: "Hello! Please upload a proposal PDF file for analysis.",
-    },
+    new ChatMessageModel({
+      id: "initial",
+      role: "assistant",
+      content: "Hello! Please upload a proposal PDF file for analysis.",
+      timestamp: Date.now(),
+    }),
   ],
   selectedFile: null,
   isAnalyzing: false,
@@ -36,7 +30,8 @@ const initialState = {
 
 export const useChatStore = create<ChatState>((set) => ({
   ...initialState,
-  addMessage: (message) => set((state) => ({ messages: [...state.messages, message] })),
+  addMessage: (message) =>
+    set((state) => ({ messages: [...state.messages, new ChatMessageModel(message)] })),
   setSelectedFile: (file) => set({ selectedFile: file }),
   setIsAnalyzing: (isAnalyzing) => set({ isAnalyzing }),
   setAnalysisResults: (results) => set({ analysisResults: results }),

@@ -15,18 +15,18 @@ export async function GET(request: NextRequest) {
         {
           message: "Analysis complete!",
           results: {
-            coverageDistribution: [
-              { name: "Health", value: 35 },
-              { name: "Life", value: 25 },
-              { name: "Property", value: 20 },
-              { name: "Auto", value: 20 },
-            ],
-            riskAssessment: [
-              { category: "Financial", score: 85 },
-              { category: "Health", score: 72 },
-              { category: "Liability", score: 68 },
-              { category: "Property", score: 90 },
-            ],
+            coverageDistribution: {
+              "Auto Insurance": 45,
+              "Home Insurance": 30,
+              "Health Insurance": 20,
+              "Life Insurance": 5,
+            },
+            riskAssessment: {
+              "Market Risk": 6.2,
+              "Health Risk": 8.1,
+              "Liability Risk": 4.5,
+              "Natural Disaster Risk": 3.8,
+            },
             summary:
               "The proposal includes comprehensive coverage across multiple insurance types with a strong focus on health and life insurance. Risk assessment indicates good financial stability with some areas for improvement in liability coverage.",
           },

@@ -6,8 +6,6 @@ import { FileUpload } from "@/components/chat/FileUpload";
 import { useChatStore } from "@/lib/store/chatStore";
 
 export default function ChatPage() {
-  const selectedFile = useChatStore((state) => state.selectedFile);
-  const isAnalyzing = useChatStore((state) => state.isAnalyzing);
   const analysisResults = useChatStore((state) => state.analysisResults);
 
   return (
