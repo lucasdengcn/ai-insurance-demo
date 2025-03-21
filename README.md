@@ -2,6 +2,12 @@
 
 A modern insurance platform powered by AI, built with Next.js, React, and Tailwind CSS. This demo showcases a user-friendly interface for managing insurance policies, claims, and documents with a focus on accessibility and responsive design.
 
+## Preview
+
+![AI Insurance Demo Preview](./public/preview.png)
+
+The application features a modern, responsive interface with dark mode support, intuitive navigation, and a comprehensive dashboard for managing insurance policies and claims.
+
 ## Features
 
 - **Modern UI/UX**: Clean and responsive design with dark mode support
@@ -29,6 +35,7 @@ A modern insurance platform powered by AI, built with Next.js, React, and Tailwi
 
 1. Clone the repository
 2. Install dependencies:
+
    ```bash
    npm install
    # or
