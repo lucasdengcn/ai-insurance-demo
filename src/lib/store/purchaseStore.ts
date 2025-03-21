@@ -12,6 +12,7 @@ interface InsurancePlan {
 interface PurchaseState {
   step: number;
   phone: string;
+  verificationCode: string;
   email: string;
   fullName: string;
   identityNumber: string;
@@ -22,6 +23,7 @@ interface PurchaseState {
   };
   setStep: (step: number) => void;
   setPhone: (phone: string) => void;
+  setVerificationCode: (verificationCode: string) => void;
   setEmail: (email: string) => void;
   setFullName: (fullName: string) => void;
   setIdentityNumber: (identityNumber: string) => void;
@@ -34,6 +36,7 @@ interface PurchaseState {
 const initialState = {
   step: 1,
   phone: "",
+  verificationCode: "",
   email: "",
   fullName: "",
   identityNumber: "",
@@ -46,6 +49,7 @@ export const usePurchaseStore = create<PurchaseState>((set) => ({
   ...initialState,
   setStep: (step) => set({ step }),
   setPhone: (phone) => set({ phone }),
+  setVerificationCode: (verificationCode) => set({ verificationCode }),
   setEmail: (email) => set({ email }),
   setFullName: (fullName) => set({ fullName }),
   setIdentityNumber: (identityNumber) => set({ identityNumber }),
