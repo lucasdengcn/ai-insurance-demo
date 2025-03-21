@@ -11,7 +11,7 @@ export default function ChatPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="mb-8 text-2xl font-bold text-gray-900 dark:text-white">Proposal Analysis</h1>
-      <div className="flex gap-6">
+      <div className="flex gap-6 min-h-[600px]">
         <div className="flex w-1/2 flex-col rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800 overflow-hidden">
           <div className="flex-1 overflow-y-auto p-4 h-[600px]">
             <ChatHistory />
@@ -20,7 +20,7 @@ export default function ChatPage() {
             <FileUpload />
           </div>
         </div>
-        <div className="w-1/2 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800 overflow-y-auto h-[600px]">
+        <div className="flex-1 flex flex-col w-1/2 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800 overflow-hidden h-full min-h-[600px]">
           <AnalysisResults results={analysisResults} />
         </div>
       </div>

@@ -44,7 +44,7 @@ export function AnalysisResults({ results }: AnalysisResultsProps) {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 h-full">
       <div>
         <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
           Coverage Distribution
@@ -74,22 +74,22 @@ export function AnalysisResults({ results }: AnalysisResultsProps) {
 
       <div>
         <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">Risk Assessment</h3>
-        <div className="h-64">
+        <div className="h-[400px]">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={chartData.riskAssessment}
               margin={{
-                top: 5,
+                top: 30,
                 right: 30,
                 left: 20,
-                bottom: 5,
+                bottom: 60,
               }}
             >
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="category" />
+              <XAxis dataKey="category" angle={-45} textAnchor="end" tick={{ fontSize: 12 }} />
               <YAxis />
               <Tooltip />
-              <Legend />
+              <Legend verticalAlign="top" align="right" wrapperStyle={{ paddingBottom: 20 }} />
               <Bar dataKey="score" fill="#8884d8" />
             </BarChart>
           </ResponsiveContainer>

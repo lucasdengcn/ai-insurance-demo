@@ -17,11 +17,9 @@ export class SSEService {
 
     this.eventSource.onmessage = (event) => {
       try {
+        console.log("SSE message received:", event.data);
         const data = JSON.parse(event.data);
-        onMessage({
-          type: "assistant",
-          message: data.message,
-        });
+        onMessage(data);
       } catch (error) {
         console.error("Error parsing SSE message:", error);
       }

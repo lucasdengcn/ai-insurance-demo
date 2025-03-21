@@ -4,8 +4,9 @@ A modern insurance platform powered by AI, built with Next.js, React, and Tailwi
 
 ## Preview
 
-![AI Insurance Demo Preview](./public/preview.png)
-![AI Insurance Proposal Analysis](./public/proposal-analysis.png)
+![Home page](./public/preview.png)
+![Proposal Analysis](./public/proposal-analysis.png)
+![Analysis Result](./public/analysis-result.png)
 
 The application features a modern, responsive interface with dark mode support, intuitive navigation, and a comprehensive dashboard for managing insurance policies and claims.
 

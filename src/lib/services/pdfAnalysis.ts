@@ -27,6 +27,7 @@ export async function analyzePDF(file: File): Promise<void> {
     // Connect to SSE stream for real-time updates
     sseService.connect(
       (message) => {
+        console.log("PDF Received message:", message);
         if (typeof message === "object" && message !== null) {
           useChatStore.getState().addMessage(
             new ChatMessageModel({
