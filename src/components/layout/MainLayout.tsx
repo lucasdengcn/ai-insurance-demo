@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ReactNode } from "react";
+import { ChatButton } from "../chat/ChatButton";
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -28,6 +29,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
             >
               Profile
             </Link>
+            <ChatButton />
           </div>
         </nav>
       </header>
