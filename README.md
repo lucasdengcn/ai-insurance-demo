@@ -16,12 +16,17 @@ The application features a modern, responsive interface with dark mode support, 
 - **Policy Management**: View and manage insurance policies in one place
 - **Claims Processing**: Streamlined claims filing and tracking
 - **Document Management**: Easy access to insurance-related documents
+- **AI-Powered PDF Analysis**: Intelligent analysis of insurance documents and proposals
+- **Real-time Chat Interface**: Interactive communication with AI assistant
+- **Multi-step Purchase Flow**: Guided insurance plan selection and verification process
 
 ## Tech Stack
 
 - **Framework**: [Next.js 14](https://nextjs.org) with App Router
 - **Language**: [TypeScript](https://www.typescriptlang.org)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com)
+- **State Management**: [Zustand](https://zustand-demo.pmnd.rs/) for efficient state handling
+- **Real-time Updates**: Server-Sent Events (SSE) for live communication
 - **Font**: [Geist](https://vercel.com/font) by Vercel
 - **Linting**: ESLint with Next.js and Prettier configurations
 
@@ -76,8 +81,18 @@ pnpm build
 ```
 src/
   ├── app/           # App router pages and layouts
+  │   ├── api/      # API routes and endpoints
+  │   ├── chat/     # AI chat interface
+  │   ├── claims/   # Claims management
+  │   └── purchase/ # Multi-step purchase flow
   ├── components/    # Reusable UI components
+  │   ├── chat/     # Chat interface components
+  │   ├── layout/   # Layout components
+  │   └── purchase/ # Purchase flow components
   └── lib/          # Utility functions and shared logic
+      ├── models/   # Data models and types
+      ├── services/ # Business logic and services
+      └── store/    # State management
 ```
 
 ## Development Guidelines
