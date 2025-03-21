@@ -18,7 +18,8 @@ export default function IdentityVerificationPage() {
     setEmail,
     setIdentityNumber,
     setErrors,
-    setStep
+    setStep,
+    validateCurrentStep
   } = usePurchaseStore();
 
   useEffect(() => {
@@ -28,30 +29,9 @@ export default function IdentityVerificationPage() {
     };
   }, [setErrors]);
 
-  const validateForm = (): boolean => {
-    const newErrors: { [key: string]: string } = {};
-
-    if (!fullName) {
-      newErrors.fullName = 'Full name is required';
-    }
-
-    if (!email) {
-      newErrors.email = 'Email is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      newErrors.email = 'Please enter a valid email address';
-    }
-
-    if (!identityNumber) {
-      newErrors.identityNumber = 'Identity number is required';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (validateForm()) {
+    if (validateCurrentStep()) {
       // In a real application, you would verify the identity here
       // For now, we'll just proceed to the next step
       setStep(3);

@@ -51,12 +51,11 @@ const insurancePlans = [
 
 export default function SelectPlanPage() {
   const router = useRouter();
-  const { selectedPlan, setSelectedPlan, setStep, setErrors, errors } = usePurchaseStore();
+  const { selectedPlan, setSelectedPlan, setStep, setErrors, errors, validateCurrentStep } = usePurchaseStore();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedPlan) {
-      setErrors({ plan: 'Please select an insurance plan' });
+    if (!validateCurrentStep()) {
       return;
     }
 

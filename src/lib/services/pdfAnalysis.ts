@@ -1,4 +1,5 @@
-import { Message } from "@/components/chat/ChatHistory";
+import { useChatStore } from "../store/chatStore";
+import { sseService } from "./sseService";
 
 export interface AnalysisResult {
   coverageDistribution: Array<{ name: string; value: number }>;
@@ -6,51 +7,52 @@ export interface AnalysisResult {
   summary: string;
 }
 
-export async function analyzePDF(file: File): Promise<{
-  message: Message;
-  results: AnalysisResult | null;
-}> {
+export async function analyzePDF(file: File): Promise<void> {
   try {
-    // TODO: Replace with actual API endpoint
     const formData = new FormData();
     formData.append("file", file);
 
-    // Simulate API call with timeout
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    // Update analyzing state
+    useChatStore.getState().setIsAnalyzing(true);
 
-    // Mock response data
-    const mockResults: AnalysisResult = {
-      coverageDistribution: [
-        { name: "Health", value: 35 },
-        { name: "Life", value: 25 },
-        { name: "Property", value: 20 },
-        { name: "Auto", value: 20 },
-      ],
-      riskAssessment: [
-        { category: "Financial", score: 85 },
-        { category: "Health", score: 72 },
-        { category: "Liability", score: 68 },
-        { category: "Property", score: 90 },
-      ],
-      summary:
-        "The proposal includes comprehensive coverage across multiple insurance types with a strong focus on health and life insurance. Risk assessment indicates good financial stability with some areas for improvement in liability coverage.",
-    };
+    // Initial message
+    useChatStore.getState().addMessage({
+      type: "assistant",
+      message: "Starting proposal analysis...",
+    });
 
-    return {
-      message: {
-        type: "assistant",
-        message: `Analysis complete! Here's a summary of the proposal:\n\n${mockResults.summary}`,
+    // Connect to SSE stream for real-time updates
+    sseService.connect(
+      (message) => {
+        if (typeof message === "object" && message !== null) {
+          useChatStore.getState().addMessage({
+            type: "assistant",
+            message: message.message || "Analyzing...",
+          });
+
+          if ("results" in message) {
+            useChatStore.getState().setAnalysisResults(message.results as AnalysisResult);
+          }
+        }
       },
-      results: mockResults,
-    };
+      (error) => {
+        console.error("SSE connection error:", error);
+        useChatStore.getState().addMessage({
+          type: "assistant",
+          message: "Error during analysis. Please try again.",
+        });
+        useChatStore.getState().setIsAnalyzing(false);
+        sseService.disconnect();
+      }
+    );
   } catch (error) {
     console.error("Error analyzing PDF:", error);
-    return {
-      message: {
-        type: "assistant",
-        message: "Sorry, there was an error analyzing the PDF file. Please try again.",
-      },
-      results: null,
-    };
+    useChatStore.getState().addMessage({
+      type: "assistant",
+      message: "Error analyzing the PDF. Please try again.",
+    });
+    useChatStore.getState().setIsAnalyzing(false);
+    useChatStore.getState().setAnalysisResults(null);
+    sseService.disconnect();
   }
 }

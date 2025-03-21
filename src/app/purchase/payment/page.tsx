@@ -15,7 +15,8 @@ export default function PaymentPage() {
     setPaymentMethod,
     setErrors,
     errors,
-    setStep
+    setStep,
+    validateCurrentStep
   } = usePurchaseStore();
 
   useEffect(() => {
@@ -26,14 +27,7 @@ export default function PaymentPage() {
   }, [setErrors]);
 
   const validateForm = (): boolean => {
-    const newErrors: { [key: string]: string } = {};
-
-    if (!paymentMethod) {
-      newErrors.paymentMethod = 'Please select a payment method';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return validateCurrentStep();
   };
 
   const handleSubmit = (e: React.FormEvent) => {

@@ -1,0 +1,66 @@
+type SSECallback = (message: any) => void;
+
+export class SSEService {
+  private eventSource: EventSource | null = null;
+  private reconnectAttempts = 0;
+  private maxReconnectAttempts = 5;
+  private reconnectDelay = 1000;
+
+  constructor(private baseUrl: string = "/api/analysis/stream") {}
+
+  connect(onMessage: SSECallback, onError?: (error: Event) => void): void {
+    if (this.eventSource) {
+      this.disconnect();
+    }
+
+    this.eventSource = new EventSource(this.baseUrl);
+
+    this.eventSource.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        onMessage({
+          type: "assistant",
+          message: data.message,
+        });
+      } catch (error) {
+        console.error("Error parsing SSE message:", error);
+      }
+    };
+
+    this.eventSource.onerror = (error) => {
+      console.error("SSE connection error:", error);
+      if (onError) {
+        onError(error);
+      }
+
+      if (this.eventSource?.readyState === EventSource.CLOSED) {
+        this.handleReconnection(onMessage, onError);
+      }
+    };
+  }
+
+  private handleReconnection(onMessage: SSECallback, onError?: (error: Event) => void): void {
+    if (this.reconnectAttempts < this.maxReconnectAttempts) {
+      this.reconnectAttempts++;
+      console.log(
+        `Attempting to reconnect (${this.reconnectAttempts}/${this.maxReconnectAttempts})...`
+      );
+
+      setTimeout(() => {
+        this.connect(onMessage, onError);
+      }, this.reconnectDelay * this.reconnectAttempts);
+    } else {
+      console.error("Max reconnection attempts reached");
+    }
+  }
+
+  disconnect(): void {
+    if (this.eventSource) {
+      this.eventSource.close();
+      this.eventSource = null;
+      this.reconnectAttempts = 0;
+    }
+  }
+}
+
+export const sseService = new SSEService();

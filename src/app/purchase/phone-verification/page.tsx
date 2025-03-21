@@ -17,7 +17,7 @@ export default function PhoneVerificationPage() {
     setVerificationCode,
     setErrors,
     setStep,
-    reset
+    validateCurrentStep
   } = usePurchaseStore();
 
   useEffect(() => {
@@ -28,18 +28,7 @@ export default function PhoneVerificationPage() {
   }, [setErrors]);
 
   const validateForm = (): boolean => {
-    const newErrors: { [key: string]: string } = {};
-
-    if (!phone) {
-      newErrors.phone = 'Phone number is required';
-    }
-
-    if (!verificationCode) {
-      newErrors.verificationCode = 'Verification code is required';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return validateCurrentStep();
   };
 
   const handleSubmit = (e: React.FormEvent) => {

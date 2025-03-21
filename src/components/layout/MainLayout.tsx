@@ -18,6 +18,12 @@ export default function MainLayout({ children }: MainLayoutProps) {
           </div>
           <div className="flex items-center space-x-4">
             <Link
+              href="/purchase/phone-verification"
+              className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+            >
+              Purchase
+            </Link>
+            <Link
               href="/dashboard"
               className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
             >

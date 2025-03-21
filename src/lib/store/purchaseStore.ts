@@ -1,60 +1,67 @@
 import { create } from "zustand";
+import { PurchaseModel, type PurchaseData } from "../models/PurchaseModel";
 
-interface InsurancePlan {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  features: string[];
-  recommended?: boolean;
-}
-
-interface PurchaseState {
-  step: number;
-  phone: string;
-  verificationCode: string;
-  email: string;
-  fullName: string;
-  identityNumber: string;
-  selectedPlan: InsurancePlan | null;
-  paymentMethod: string;
-  errors: {
-    [key: string]: string;
-  };
+interface PurchaseState extends PurchaseData {
   setStep: (step: number) => void;
   setPhone: (phone: string) => void;
   setVerificationCode: (verificationCode: string) => void;
   setEmail: (email: string) => void;
   setFullName: (fullName: string) => void;
   setIdentityNumber: (identityNumber: string) => void;
-  setSelectedPlan: (plan: InsurancePlan | null) => void;
+  setSelectedPlan: (plan: PurchaseData["selectedPlan"]) => void;
   setPaymentMethod: (method: string) => void;
-  setErrors: (errors: { [key: string]: string }) => void;
+  setErrors: (errors: PurchaseData["errors"]) => void;
+  validateCurrentStep: () => boolean;
   reset: () => void;
 }
 
-const initialState = {
-  step: 1,
-  phone: "",
-  verificationCode: "",
-  email: "",
-  fullName: "",
-  identityNumber: "",
-  selectedPlan: null,
-  paymentMethod: "",
-  errors: {},
-};
+const purchaseModel = new PurchaseModel();
 
 export const usePurchaseStore = create<PurchaseState>((set) => ({
-  ...initialState,
-  setStep: (step) => set({ step }),
-  setPhone: (phone) => set({ phone }),
-  setVerificationCode: (verificationCode) => set({ verificationCode }),
-  setEmail: (email) => set({ email }),
-  setFullName: (fullName) => set({ fullName }),
-  setIdentityNumber: (identityNumber) => set({ identityNumber }),
-  setSelectedPlan: (selectedPlan) => set({ selectedPlan }),
-  setPaymentMethod: (paymentMethod) => set({ paymentMethod }),
-  setErrors: (errors) => set({ errors }),
-  reset: () => set(initialState),
+  ...purchaseModel.toJSON(),
+  setStep: (step) => {
+    purchaseModel.step = step;
+    set(purchaseModel.toJSON());
+  },
+  setPhone: (phone) => {
+    purchaseModel.phone = phone;
+    set(purchaseModel.toJSON());
+  },
+  setVerificationCode: (verificationCode) => {
+    purchaseModel.verificationCode = verificationCode;
+    set(purchaseModel.toJSON());
+  },
+  setEmail: (email) => {
+    purchaseModel.email = email;
+    set(purchaseModel.toJSON());
+  },
+  setFullName: (fullName) => {
+    purchaseModel.fullName = fullName;
+    set(purchaseModel.toJSON());
+  },
+  setIdentityNumber: (identityNumber) => {
+    purchaseModel.identityNumber = identityNumber;
+    set(purchaseModel.toJSON());
+  },
+  setSelectedPlan: (selectedPlan) => {
+    purchaseModel.selectedPlan = selectedPlan;
+    set(purchaseModel.toJSON());
+  },
+  setPaymentMethod: (paymentMethod) => {
+    purchaseModel.paymentMethod = paymentMethod;
+    set(purchaseModel.toJSON());
+  },
+  setErrors: (errors) => {
+    purchaseModel.errors = errors;
+    set(purchaseModel.toJSON());
+  },
+  validateCurrentStep: () => {
+    const isValid = purchaseModel.validateCurrentStep();
+    set(purchaseModel.toJSON());
+    return isValid;
+  },
+  reset: () => {
+    purchaseModel.reset();
+    set(purchaseModel.toJSON());
+  },
 }));
