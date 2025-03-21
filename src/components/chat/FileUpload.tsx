@@ -2,12 +2,12 @@
 
 import { ChangeEvent, DragEvent, useState } from "react";
 
-interface FileUploadProps {
-  onFileSelect: (file: File) => void;
-}
+import { useChatStore } from "@/lib/store/chatStore";
 
-export function FileUpload({ onFileSelect }: FileUploadProps) {
+export function FileUpload() {
   const [isDragging, setIsDragging] = useState(false);
+  const setSelectedFile = useChatStore((state) => state.setSelectedFile);
+  const addMessage = useChatStore((state) => state.addMessage);
 
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -27,7 +27,8 @@ export function FileUpload({ onFileSelect }: FileUploadProps) {
     const pdfFile = files.find((file) => file.type === "application/pdf");
 
     if (pdfFile) {
-      onFileSelect(pdfFile);
+      setSelectedFile(pdfFile);
+      addMessage({ type: "user", message: `Uploaded file: ${pdfFile.name}` });
     } else {
       alert("Please upload a PDF file");
     }
@@ -36,7 +37,8 @@ export function FileUpload({ onFileSelect }: FileUploadProps) {
   const handleFileInput = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files[0] && files[0].type === "application/pdf") {
-      onFileSelect(files[0]);
+      setSelectedFile(files[0]);
+      addMessage({ type: "user", message: `Uploaded file: ${files[0].name}` });
     } else {
       alert("Please upload a PDF file");
     }
