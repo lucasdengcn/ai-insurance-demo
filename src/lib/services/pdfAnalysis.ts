@@ -40,11 +40,13 @@ export async function analyzePDF(file: File): Promise<void> {
 
           if ("results" in message) {
             useChatStore.getState().setAnalysisResults(message.results as AnalysisResult);
+            // Reset analysis results
+            closeSSE();
           }
         }
       },
       (error) => {
-        console.error("SSE connection error:", error);
+        console.error("PDF Error:", error);
         useChatStore.getState().addMessage(
           new ChatMessageModel({
             id: crypto.randomUUID(),
@@ -53,8 +55,7 @@ export async function analyzePDF(file: File): Promise<void> {
             timestamp: Date.now(),
           })
         );
-        useChatStore.getState().setIsAnalyzing(false);
-        sseService.disconnect();
+        closeSSE();
       }
     );
   } catch (error) {
@@ -67,8 +68,13 @@ export async function analyzePDF(file: File): Promise<void> {
         timestamp: Date.now(),
       })
     );
-    useChatStore.getState().setIsAnalyzing(false);
+    // Reset analysis results
     useChatStore.getState().setAnalysisResults(null);
+    closeSSE();
+  }
+
+  function closeSSE() {
+    useChatStore.getState().setIsAnalyzing(false);
     sseService.disconnect();
   }
 }

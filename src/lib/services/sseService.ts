@@ -6,7 +6,7 @@ export class SSEService {
   private maxReconnectAttempts = 5;
   private reconnectDelay = 1000;
 
-  constructor(private baseUrl: string = "/api/analysis/stream") {}
+  constructor(private baseUrl: string = "http://localhost:8080/api/analysis/stream") {}
 
   connect(onMessage: SSECallback, onError?: (error: Event) => void): void {
     if (this.eventSource) {
@@ -25,14 +25,24 @@ export class SSEService {
       }
     };
 
-    this.eventSource.onerror = (error) => {
-      console.error("SSE connection error:", error);
-      if (onError) {
-        onError(error);
-      }
+    this.eventSource.onopen = () => {
+      console.log("SSE connection opened");
+      this.reconnectAttempts = 0;
+    };
 
+    this.eventSource.addEventListener("complete", (message) => {
+      console.info("complete:", message);
+    });
+
+    this.eventSource.onerror = (error) => {
+      console.error("SSE Error:", error);
       if (this.eventSource?.readyState === EventSource.CLOSED) {
         this.handleReconnection(onMessage, onError);
+      } else {
+        // console.error("SSE Error: connection error:", error);
+        if (onError) {
+          onError(error);
+        }
       }
     };
   }
