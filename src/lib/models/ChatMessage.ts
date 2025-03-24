@@ -1,8 +1,20 @@
+export interface TimeSeriesPoint<T> {
+  timestamp: number;
+  value: T;
+}
+
 export interface ChatMessage {
   id: string;
   content: string;
   role: "user" | "assistant";
   timestamp: number;
+}
+
+export interface TimeSeriesDataPoint {
+  timestamp: number;
+  premium: number;
+  cashValue: number;
+  compensation: number;
 }
 
 export interface AnalysisResult {
@@ -15,6 +27,7 @@ export interface AnalysisResult {
   riskAssessment: {
     [category: string]: number;
   };
+  timeSeriesData: TimeSeriesDataPoint[];
 }
 
 export class ChatMessageModel implements ChatMessage {
@@ -55,6 +68,7 @@ export class AnalysisResultModel implements AnalysisResult {
   riskLevel: "low" | "medium" | "high";
   coverageDistribution: { [name: string]: number };
   riskAssessment: { [category: string]: number };
+  timeSeriesData: TimeSeriesDataPoint[];
 
   constructor(data: AnalysisResult) {
     this.summary = data.summary;
@@ -62,6 +76,7 @@ export class AnalysisResultModel implements AnalysisResult {
     this.riskLevel = data.riskLevel;
     this.coverageDistribution = data.coverageDistribution;
     this.riskAssessment = data.riskAssessment;
+    this.timeSeriesData = data.timeSeriesData;
   }
 
   static validate(data: Partial<AnalysisResult>): boolean {
@@ -80,6 +95,7 @@ export class AnalysisResultModel implements AnalysisResult {
       riskLevel: this.riskLevel,
       coverageDistribution: this.coverageDistribution,
       riskAssessment: this.riskAssessment,
+      timeSeriesData: this.timeSeriesData,
     };
   }
 }

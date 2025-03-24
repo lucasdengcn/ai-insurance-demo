@@ -6,7 +6,7 @@ export class SSEService {
   private maxReconnectAttempts = 5;
   private reconnectDelay = 1000;
 
-  constructor(private baseUrl: string = "http://localhost:8080/api/analysis/stream") {}
+  constructor(private baseUrl: string = "/api/analysis/stream") {}
 
   connect(onMessage: SSECallback, onError?: (error: Event) => void): void {
     if (this.eventSource) {
