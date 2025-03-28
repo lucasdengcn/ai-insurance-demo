@@ -5,6 +5,7 @@ import { ChangeEvent, DragEvent, useState } from "react";
 import { ChatMessageModel } from "@/lib/models/ChatMessage";
 import { analyzePDF } from "@/lib/services/pdfAnalysis";
 import { useChatStore } from "@/lib/store/chatStore";
+import { useTabsStore } from "@/lib/store/tabsStore";
 
 export function FileUpload() {
   const [isDragging, setIsDragging] = useState(false);
@@ -21,6 +22,25 @@ export function FileUpload() {
     setIsDragging(false);
   };
 
+  const displayPDFFile = (file: File) => {
+    // Create a URL for the PDF file to display in browser window
+    const pdfUrl = URL.createObjectURL(file);
+    useChatStore.setState({
+      browserWindowUrl: pdfUrl,
+      showBrowserWindow: true
+    });
+    useTabsStore.setState({ activeTab: "browser" });
+  };
+
+  const displayMessage = (message: string) => {
+    addMessage(new ChatMessageModel({
+      id: crypto.randomUUID(),
+      role: "user",
+      content: message,
+      timestamp: Date.now(),
+    }));
+  };
+
   const handleDrop = async (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDragging(false);
@@ -30,12 +50,8 @@ export function FileUpload() {
 
     if (pdfFile) {
       setSelectedFile(pdfFile, pdfFile.type);
-      addMessage(new ChatMessageModel({
-        id: crypto.randomUUID(),
-        role: "user",
-        content: `Uploaded file: ${pdfFile.name}`,
-        timestamp: Date.now(),
-      }));
+      displayMessage(`Uploaded file: ${pdfFile.name}`);
+      displayPDFFile(pdfFile);
       await analyzePDF(pdfFile);
     } else {
       alert("Please upload a PDF file");
@@ -46,12 +62,8 @@ export function FileUpload() {
     const files = e.target.files;
     if (files && files[0] && files[0].type === "application/pdf") {
       setSelectedFile(files[0], files[0].type);
-      addMessage(new ChatMessageModel({
-        id: crypto.randomUUID(),
-        role: "user",
-        content: `Uploaded file: ${files[0].name}`,
-        timestamp: Date.now(),
-      }))
+      displayMessage(`Uploaded file: ${files[0].name}`);
+      displayPDFFile(files[0]);
       await analyzePDF(files[0]);
     } else {
       alert("Please upload a PDF file");

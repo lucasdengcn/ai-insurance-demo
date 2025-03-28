@@ -5,10 +5,10 @@ import { BrowserWindow } from "@/components/chat/BrowserWindow";
 import { ChatHistory } from "@/components/chat/ChatHistory";
 import { FileUpload } from "@/components/chat/FileUpload";
 import { Tab, TabList, TabPanel, Tabs } from "@/components/ui/Tabs";
-import { useChatStore } from "@/lib/store/chatStore";
+import { useTabsStore } from "@/lib/store/tabsStore";
 
 export default function ChatPage() {
-  const activeTab = useChatStore((state) => state.activeTab);
+  const activeTab = useTabsStore((state) => state.activeTab);
 
   return (
     <div className="container mx-auto">

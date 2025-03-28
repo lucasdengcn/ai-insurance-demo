@@ -1,21 +1,7 @@
 'use client';
 
-import { ReactNode, createContext, useContext, useState } from 'react';
-
-type TabsContextType = {
-  activeTab: string;
-  setActiveTab: (id: string) => void;
-};
-
-const TabsContext = createContext<TabsContextType | undefined>(undefined);
-
-function useTabs() {
-  const context = useContext(TabsContext);
-  if (!context) {
-    throw new Error('useTabs must be used within a TabsProvider');
-  }
-  return context;
-}
+import { useTabsStore } from '@/lib/store/tabsStore';
+import { ReactNode } from 'react';
 
 type TabsProps = {
   defaultTab: string;
@@ -24,12 +10,16 @@ type TabsProps = {
 };
 
 export function Tabs({ defaultTab, children, className = '' }: TabsProps) {
-  const [activeTab, setActiveTab] = useState(defaultTab);
+  const activeTab = useTabsStore((state) => state.activeTab);
+  const setActiveTab = useTabsStore((state) => state.setActiveTab);
+
+  // Initialize the tab if needed
+  if (activeTab !== defaultTab) {
+    setActiveTab(defaultTab);
+  }
 
   return (
-    <TabsContext.Provider value={{ activeTab, setActiveTab }}>
-      <div className={`flex flex-col ${className}`}>{children}</div>
-    </TabsContext.Provider>
+    <div className={`flex flex-col ${className}`}>{children}</div>
   );
 }
 
@@ -53,7 +43,8 @@ type TabProps = {
 };
 
 export function Tab({ id, children, className = '' }: TabProps) {
-  const { activeTab, setActiveTab } = useTabs();
+  const activeTab = useTabsStore((state) => state.activeTab);
+  const setActiveTab = useTabsStore((state) => state.setActiveTab);
   const isActive = activeTab === id;
 
   return (
@@ -76,7 +67,7 @@ type TabPanelProps = {
 };
 
 export function TabPanel({ id, children, className = '' }: TabPanelProps) {
-  const { activeTab } = useTabs();
+  const activeTab = useTabsStore((state) => state.activeTab);
   if (activeTab !== id) return null;
 
   return <div className={`h-full flex flex-col ${className}`}>{children}</div>;
