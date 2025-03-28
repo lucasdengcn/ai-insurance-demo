@@ -5,18 +5,19 @@ import { ImageMessage } from '@/components/chat/messages/ImageMessage';
 import { PdfMessage } from '@/components/chat/messages/PdfMessage';
 import { TextMessage } from '@/components/chat/messages/TextMessage';
 import { ChatMessage } from "@/lib/models/ChatMessage";
+import { useBrowserStore } from '@/lib/store/browserStore';
 import { useChatStore } from "@/lib/store/chatStore";
 import { useTabsStore } from "@/lib/store/tabsStore";
 
 export function ChatHistory() {
   const messages = useChatStore((state) => state.messages);
   const setActiveTab = useTabsStore((state) => state.setActiveTab);
-  const setCurrentMessage = useChatStore((state) => state.setCurrentMessage);
+  const setBrowserTarget = useBrowserStore((state) => state.setBrowserTarget);
 
   // Handle click on PDF or image message
   const handleMessageClick = (message: ChatMessage) => {
     if ((message.messageType === 'pdf' || message.messageType === 'image') && message.browserUrl) {
-      setCurrentMessage(message);
+      setBrowserTarget(message.browserUrl, message.messageType);
       setActiveTab('browser'); // Switch to browser tab
     }
   };

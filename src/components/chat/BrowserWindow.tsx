@@ -1,6 +1,6 @@
 'use client';
 
-import { useChatStore } from "@/lib/store/chatStore";
+import { useBrowserStore } from "@/lib/store/browserStore";
 
 // Import specialized viewer components
 import { ImageViewer } from "./viewers/ImageViewer";
@@ -8,16 +8,15 @@ import { PDFViewer } from "./viewers/PDFViewer";
 import { URLViewer } from "./viewers/URLViewer";
 
 export function BrowserWindow() {
-  const currentMessage = useChatStore((state) => state.currentMessage);
-  const messageType = currentMessage?.messageType;
-  const url = currentMessage?.browserUrl || '';
+  const url = useBrowserStore((state) => state.url);
+  const contentType = useBrowserStore((state) => state.contentType);
 
-  // Log the current message for debugging
-  console.log("BrowserWindow currentMessage:", currentMessage);
+  // Log the current state for debugging
+  console.log("BrowserWindow state:", { url, contentType });
 
-  // Determine content type based on message
-  const isPdf = messageType === 'pdf';
-  const isImage = messageType === 'image';
+  // Determine content type
+  const isPdf = contentType === 'pdf';
+  const isImage = contentType === 'image';
 
   return (
     <div className="h-full w-full flex flex-col">

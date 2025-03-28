@@ -3,15 +3,17 @@
 import { ChangeEvent, DragEvent, useState } from "react";
 
 import { analyzePDF } from "@/lib/services/pdfAnalysis";
+import { useBrowserStore } from '@/lib/store/browserStore';
 import { useChatStore } from "@/lib/store/chatStore";
 import { useTabsStore } from "@/lib/store/tabsStore";
+
 
 export function FileUpload() {
   const [isDragging, setIsDragging] = useState(false);
   const addTextMessage = useChatStore((state) => state.addTextMessage);
   const addPdfMessage = useChatStore((state) => state.addPdfMessage);
   const addImageMessage = useChatStore((state) => state.addImageMessage);
-  const setCurrentMessage = useChatStore((state) => state.setCurrentMessage);
+  const setBrowserTarget = useBrowserStore((state) => state.setBrowserTarget);
 
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -26,14 +28,7 @@ export function FileUpload() {
   const displayFile = (file: File) => {
     // Create a URL for the file to display in browser window
     const fileUrl = URL.createObjectURL(file);
-    setCurrentMessage({
-      id: crypto.randomUUID(),
-      content: file.name,
-      timestamp: Date.now(),
-      role: "user",
-      messageType: file.type === "application/pdf" ? "pdf" : "image",
-      browserUrl: fileUrl,
-    })
+    setBrowserTarget(fileUrl, file.type === "application/pdf" ? "pdf" : "image");
     useTabsStore.setState({ activeTab: "browser" });
   };
 
