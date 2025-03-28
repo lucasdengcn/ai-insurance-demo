@@ -22,11 +22,11 @@ export function FileUpload() {
     setIsDragging(false);
   };
 
-  const displayPDFFile = (file: File) => {
-    // Create a URL for the PDF file to display in browser window
-    const pdfUrl = URL.createObjectURL(file);
+  const displayFile = (file: File) => {
+    // Create a URL for the file to display in browser window
+    const fileUrl = URL.createObjectURL(file);
     useChatStore.setState({
-      browserWindowUrl: pdfUrl,
+      browserWindowUrl: fileUrl,
       showBrowserWindow: true
     });
     useTabsStore.setState({ activeTab: "browser" });
@@ -41,33 +41,71 @@ export function FileUpload() {
     }));
   };
 
+  const checkFileSize = (file: File) => {
+    const maxSize = 10 * 1024 * 1024; // 10 MB
+    if (file.size > maxSize) {
+      alert("File size exceeds the maximum limit of 10 MB");
+      return false;
+    }
+    return true;
+  };
+
+  const checkFileType = (file: File) => {
+    const allowedTypes = ["application/pdf", "image/jpeg", "image/png"];
+    if (!allowedTypes.includes(file.type)) {
+      alert("Invalid file type. Please upload a PDF or image file");
+      return false;
+    }
+    return true;
+  };
+
+  const validateFiles = (files: File[]) => {
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      if (!checkFileSize(file)) {
+        return false;
+      }
+      if (!checkFileType(file)) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const processFile = async (file: File) => {
+    setSelectedFile(file, file.type);
+    displayMessage(`Uploaded file: ${file.name}`);
+    displayFile(file);
+    if (file.type === "application/pdf") {
+      await analyzePDF(file);
+    }
+  };
+
+  const processFiles = async (files: File[]) => {
+    if (!validateFiles(files)) {
+      return;
+    }
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      await processFile(file);
+    }
+  };
+
   const handleDrop = async (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDragging(false);
 
     const files = Array.from(e.dataTransfer.files);
-    const pdfFile = files.find((file) => file.type === "application/pdf");
-
-    if (pdfFile) {
-      setSelectedFile(pdfFile, pdfFile.type);
-      displayMessage(`Uploaded file: ${pdfFile.name}`);
-      displayPDFFile(pdfFile);
-      await analyzePDF(pdfFile);
-    } else {
-      alert("Please upload a PDF file");
-    }
+    await processFiles(files);
   };
 
   const handleFileInput = async (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    if (files && files[0] && files[0].type === "application/pdf") {
-      setSelectedFile(files[0], files[0].type);
-      displayMessage(`Uploaded file: ${files[0].name}`);
-      displayPDFFile(files[0]);
-      await analyzePDF(files[0]);
-    } else {
-      alert("Please upload a PDF file");
+    if (!files) {
+      alert("Please upload a PDF or image file");
+      return;
     }
+    await processFiles(Array.from(files));
   };
 
   return (
@@ -80,13 +118,13 @@ export function FileUpload() {
       onClick={() => document.getElementById("fileInput")?.click()}
     >
       <input
-        aria-label="Upload PDF file"
-        title="Choose a PDF file to upload"
-        placeholder="Choose a PDF file"
+        aria-label="Upload PDF or image file"
+        title="Choose a PDF or image file to upload"
+        placeholder="Choose a PDF or image file"
         id="fileInput"
         type="file"
         className="hidden"
-        accept=".pdf"
+        accept=".pdf,image/*"
         onChange={handleFileInput}
       />
       <svg
@@ -103,7 +141,7 @@ export function FileUpload() {
         />
       </svg>
       <p className="text-sm text-gray-600 dark:text-gray-400">
-        Drag and drop your PDF file here, or click to select
+        Drag and drop your PDF or image file here, or click to select
       </p>
     </div>
   );

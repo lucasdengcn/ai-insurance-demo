@@ -1,12 +1,12 @@
 'use client';
 
 import { useChatStore } from "@/lib/store/chatStore";
-import { useEffect, useRef, useState } from 'react';
+import Image from "next/image";
+import { useRef } from 'react';
 
 
 export function BrowserWindow() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const [isPdf, setIsPdf] = useState(false);
   let url = useChatStore((state) => state.browserWindowUrl);
   const fileType = useChatStore((state) => state.fileType);
   // Log the URL to the console for debugging purposes
@@ -15,11 +15,8 @@ export function BrowserWindow() {
     url = "/deepseek.pdf";
   }
 
-  useEffect(() => {
-    // Check if the URL is a PDF file
-    const isPdfFile = fileType && fileType.endsWith('pdf') || url.toLowerCase().endsWith('.pdf');
-    setIsPdf(isPdfFile);
-  }, [fileType, url]);
+  const isPdf = fileType && fileType.endsWith('pdf') || url.toLowerCase().endsWith('.pdf');
+  const isImage = fileType && fileType.startsWith('image/');
 
   return (
     <div className="h-full w-full flex flex-col">
@@ -48,6 +45,16 @@ export function BrowserWindow() {
               </a>
             </div>
           </object>
+        ) : isImage ? (
+          <div className="w-full h-full flex items-center justify-center overflow-auto p-4">
+            <Image
+              src={url}
+              width={800}
+              height={600}
+              alt="Uploaded image"
+              className="max-w-full max-h-full object-contain"
+            />
+          </div>
         ) : (
           <iframe
             ref={iframeRef}

@@ -72,7 +72,7 @@ export function AnalysisResults() {
   const { formattedData, crossoverPoint } = formatTimeSeriesData(results.timeSeriesData);
 
   return (
-    <div className="space-y-6 h-full m-4">
+    <div className="space-y-6 h-full m-6">
       <div>
         <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
           Premium vs Cash Value Analysis
