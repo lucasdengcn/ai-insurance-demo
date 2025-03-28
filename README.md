@@ -1,11 +1,11 @@
-# AI Insurance Demo
+# AI Insurance Workspace Demo
 
 A modern insurance platform powered by AI, built with Next.js, React, and Tailwind CSS. This demo showcases a user-friendly interface for managing insurance policies, claims, and documents with a focus on accessibility and responsive design.
 
 ## Preview
 
 ![Home page](./public/preview.png)
-![Proposal Analysis](./public/proposal-analysis.png)
+![Proposal WS](./public/proposal-ws.png)
 ![Analysis Result](./public/analysis-result.png)
 
 The application features a modern, responsive interface with dark mode support, intuitive navigation, and a comprehensive dashboard for managing insurance policies and claims.
