@@ -12,7 +12,6 @@ export default function ChatPage() {
 
   return (
     <div className="container mx-auto">
-      <h1 className="mb-8 text-2xl font-bold text-gray-900 dark:text-white">Health Proposal Analysis</h1>
       <div className="flex gap-6 min-h-[600px]">
         <div className="flex w-1/3 flex-col rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800 overflow-hidden">
           <div className="flex-1 overflow-y-auto p-4 h-[600px]">

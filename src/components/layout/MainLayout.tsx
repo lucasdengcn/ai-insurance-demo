@@ -13,7 +13,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
         <nav className="w-full flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center">
             <Link href="/" className="text-xl font-bold text-gray-900 dark:text-white">
-              AI Insurance
+              AI Insurance / Health Proposal Analysis
             </Link>
           </div>
           <div className="flex items-center space-x-4">
