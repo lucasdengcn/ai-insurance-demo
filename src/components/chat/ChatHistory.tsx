@@ -48,7 +48,12 @@ export function ChatHistory() {
                 onClick={() => handleMessageClick(message)}
               />
             ) : message.messageType === 'action' ? (
-              <ActionMessage content={message.content} role={message.role} />
+              <ActionMessage
+                content={message.content}
+                role={message.role}
+                actionType={message.actionType}
+                actionData={message.actionData}
+              />
             ) : (
               <TextMessage content={message.content} role={message.role} />
             )}

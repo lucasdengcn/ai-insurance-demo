@@ -10,6 +10,8 @@ export interface ChatMessage {
   timestamp: number;
   browserUrl?: string; // Optional URL to open in browser window when message is displayed
   messageType?: "text" | "pdf" | "image" | "action"; // Type of message for different rendering and actions
+  actionType?: "approval" | "confirm" | "open" | "info"; // Type of action for action messages
+  actionData?: Record<string, any>; // Additional data for action messages
 }
 
 export interface TimeSeriesDataPoint {
@@ -39,6 +41,8 @@ export class ChatMessageModel implements ChatMessage {
   timestamp: number;
   browserUrl?: string;
   messageType?: "text" | "pdf" | "image" | "action";
+  actionType?: "approval" | "confirm" | "open" | "info";
+  actionData?: Record<string, any>;
 
   constructor(data: ChatMessage) {
     this.id = data.id;
@@ -47,6 +51,8 @@ export class ChatMessageModel implements ChatMessage {
     this.timestamp = data.timestamp;
     this.browserUrl = data.browserUrl;
     this.messageType = data.messageType || "text"; // Default to text if not specified
+    this.actionType = data.actionType;
+    this.actionData = data.actionData;
   }
 
   static validate(data: Partial<ChatMessage>): boolean {
@@ -66,6 +72,8 @@ export class ChatMessageModel implements ChatMessage {
       timestamp: this.timestamp,
       browserUrl: this.browserUrl,
       messageType: this.messageType,
+      actionType: this.actionType,
+      actionData: this.actionData,
     };
   }
 }

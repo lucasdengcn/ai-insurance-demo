@@ -1,13 +1,16 @@
 'use client';
 
+import { ActionMessageSamples } from "@/components/chat/ActionMessageSamples";
 import { AnalysisResults } from "@/components/chat/AnalysisResults";
 import { BrowserWindow } from "@/components/chat/BrowserWindow";
 import { ChatHistory } from "@/components/chat/ChatHistory";
 import { FileUpload } from "@/components/chat/FileUpload";
 import { Tab, TabList, TabPanel, Tabs } from "@/components/ui/Tabs";
+import { useWebSocket } from "@/lib/hooks/useWebSocket";
 import { useTabsStore } from "@/lib/store/tabsStore";
 
 export default function ChatPage() {
+  useWebSocket();
   const activeTab = useTabsStore((state) => state.activeTab);
 
   return (
@@ -19,6 +22,7 @@ export default function ChatPage() {
           </div>
           <div className="border-t border-gray-200 dark:border-gray-700 p-4">
             <FileUpload />
+            <ActionMessageSamples />
           </div>
         </div>
         <div className="w-2/3 flex flex-col rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800 overflow-hidden h-full min-h-[600px]">

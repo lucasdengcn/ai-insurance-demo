@@ -20,15 +20,19 @@ export function BrowserWindow() {
 
   return (
     <div className="h-full w-full flex flex-col">
-      <div className="flex-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden min-h-0">
-        {isPdf ? (
-          <PDFViewer url={url} />
-        ) : isImage ? (
-          <ImageViewer url={url} />
-        ) : (
-          <URLViewer url={url} />
-        )}
-      </div>
+      {url ? (
+        <div className="flex-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden min-h-0">
+          {isPdf ? (
+            <PDFViewer url={url} />
+          ) : isImage ? (
+            <ImageViewer url={url} />
+          ) : (
+            <URLViewer url={url} />
+          )}
+        </div>
+      ) : (
+        <div>No URL</div>
+      )}
     </div>
   );
 }
