@@ -29,13 +29,13 @@ export function FileUpload() {
     const pdfFile = files.find((file) => file.type === "application/pdf");
 
     if (pdfFile) {
-      setSelectedFile(pdfFile);
+      setSelectedFile(pdfFile, pdfFile.type);
       addMessage(new ChatMessageModel({
         id: crypto.randomUUID(),
         role: "user",
         content: `Uploaded file: ${pdfFile.name}`,
         timestamp: Date.now(),
-      }))
+      }));
       await analyzePDF(pdfFile);
     } else {
       alert("Please upload a PDF file");
@@ -45,7 +45,7 @@ export function FileUpload() {
   const handleFileInput = async (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files[0] && files[0].type === "application/pdf") {
-      setSelectedFile(files[0]);
+      setSelectedFile(files[0], files[0].type);
       addMessage(new ChatMessageModel({
         id: crypto.randomUUID(),
         role: "user",

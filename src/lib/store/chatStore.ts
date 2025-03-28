@@ -5,13 +5,14 @@ import { AnalysisResult, ChatMessage, ChatMessageModel } from "../models/ChatMes
 interface ChatState {
   messages: ChatMessage[];
   selectedFile: File | null;
+  fileType: string | null;
   isAnalyzing: boolean;
   analysisResults: AnalysisResult | null;
   showBrowserWindow: boolean;
   browserWindowUrl: string;
   activeTab: string;
   addMessage: (message: ChatMessage) => void;
-  setSelectedFile: (file: File | null) => void;
+  setSelectedFile: (file: File | null, fileType?: string | null) => void;
   setIsAnalyzing: (isAnalyzing: boolean) => void;
   setAnalysisResults: (results: AnalysisResult | null) => void;
   setShowBrowserWindow: (show: boolean) => void;
@@ -30,6 +31,7 @@ const initialState = {
     }),
   ],
   selectedFile: null,
+  fileType: null,
   isAnalyzing: false,
   analysisResults: null,
   showBrowserWindow: false,
@@ -41,7 +43,8 @@ export const useChatStore = create<ChatState>((set) => ({
   ...initialState,
   addMessage: (message) =>
     set((state) => ({ messages: [...state.messages, new ChatMessageModel(message)] })),
-  setSelectedFile: (file) => set({ selectedFile: file }),
+  setSelectedFile: (file, fileType = null) =>
+    set({ selectedFile: file, fileType: fileType || (file ? file.type : null) }),
   setIsAnalyzing: (isAnalyzing) => set({ isAnalyzing }),
   setAnalysisResults: (results) => set({ analysisResults: results }),
   setShowBrowserWindow: (show) => set({ showBrowserWindow: show }),

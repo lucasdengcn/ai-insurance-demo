@@ -7,12 +7,20 @@ import { AnalysisResult } from "../models/ChatMessage";
 export type { AnalysisResult };
 
 export async function analyzePDF(file: File): Promise<void> {
+  let pdfUrl: string | null = null; // Declare at function scope
+
   try {
     const formData = new FormData();
     formData.append("file", file);
 
-    // Update analyzing state
-    useChatStore.getState().setIsAnalyzing(true);
+    // Create a URL for the PDF file to display in browser window
+    pdfUrl = URL.createObjectURL(file);
+    useChatStore.setState({
+      browserWindowUrl: pdfUrl,
+      showBrowserWindow: true,
+      activeTab: "browser",
+      isAnalyzing: true,
+    });
 
     // Initial message
     useChatStore.getState().addMessage(

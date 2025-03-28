@@ -8,38 +8,34 @@ export function BrowserWindow() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [isPdf, setIsPdf] = useState(false);
   let url = useChatStore((state) => state.browserWindowUrl);
+  const fileType = useChatStore((state) => state.fileType);
+  // Log the URL to the console for debugging purposes
+  console.log("BrowserWindow url: " + url + " fileType: " + fileType);
   if (!url) {
     url = "/deepseek.pdf";
   }
 
   useEffect(() => {
     // Check if the URL is a PDF file
-    const isPdfFile = url.toLowerCase().endsWith('.pdf');
+    const isPdfFile = fileType && fileType.endsWith('pdf') || url.toLowerCase().endsWith('.pdf');
     setIsPdf(isPdfFile);
-  }, [url]);
+  }, [fileType, url]);
 
   return (
     <div className="h-full w-full flex flex-col">
-      <div className="flex items-center justify-between bg-gray-100 dark:bg-gray-700 p-2 rounded-t-lg">
-        <div className="flex items-center space-x-1">
-          <div className="w-3 h-3 rounded-full bg-red-500"></div>
-          <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-          <div className="w-3 h-3 rounded-full bg-green-500"></div>
-        </div>
-        <div className="flex-1 mx-4">
-          <div className="bg-white dark:bg-gray-600 rounded-md px-3 py-1 text-sm truncate text-center">
-            {url}
-          </div>
-        </div>
-        <div className="w-6"></div> {/* Spacer for balance */}
-      </div>
       <div className="flex-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden min-h-0">
         {isPdf ? (
           <object
             data={url}
             type="application/pdf"
-            className="w-full h-full min-h-[800px] flex flex-col items-center justify-center p-4"
+            className="w-full h-full flex flex-col items-center justify-center min-h-[800px]"
           >
+            <param name="view" value="FitH" />
+            <param name="zoom" value="100" />
+            <param name="navpanes" value="1" />
+            <param name="toolbar" value="1" />
+            <param name="statusbar" value="1" />
+            <param name="scrollbar" value="1" />
             <div className="flex items-center justify-center h-full flex-col p-4">
               <p className="text-red-500 mb-2">Unable to display PDF directly.</p>
               <a

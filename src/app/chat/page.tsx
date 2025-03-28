@@ -22,7 +22,7 @@ export default function ChatPage() {
             <FileUpload />
           </div>
         </div>
-        <div className="flex-1 flex flex-col w-2/3 rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800 overflow-hidden h-full min-h-[600px]">
+        <div className="w-2/3 flex flex-col rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800 overflow-hidden h-full min-h-[600px]">
           <Tabs defaultTab={activeTab} className="h-full flex flex-col">
             <div className="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 p-3">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Results Panel</h3>
