@@ -1,9 +1,26 @@
 'use client';
 
+import { ActionMessage } from '@/components/chat/messages/ActionMessage';
+import { ImageMessage } from '@/components/chat/messages/ImageMessage';
+import { PdfMessage } from '@/components/chat/messages/PdfMessage';
+import { TextMessage } from '@/components/chat/messages/TextMessage';
+import { ChatMessage } from "@/lib/models/ChatMessage";
 import { useChatStore } from "@/lib/store/chatStore";
+import { useTabsStore } from "@/lib/store/tabsStore";
 
 export function ChatHistory() {
   const messages = useChatStore((state) => state.messages);
+  const setActiveTab = useTabsStore((state) => state.setActiveTab);
+  const setCurrentMessage = useChatStore((state) => state.setCurrentMessage);
+
+  // Handle click on PDF or image message
+  const handleMessageClick = (message: ChatMessage) => {
+    if ((message.messageType === 'pdf' || message.messageType === 'image') && message.browserUrl) {
+      setCurrentMessage(message);
+      setActiveTab('browser'); // Switch to browser tab
+    }
+  };
+
   return (
     <div className="flex-1 space-y-4 overflow-y-auto p-4">
       {messages.map((message) => (
@@ -17,7 +34,23 @@ export function ChatHistory() {
               : "bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white"
               }`}
           >
-            <p className="whitespace-pre-wrap break-words">{message.content}</p>
+            {message.messageType === 'pdf' ? (
+              <PdfMessage
+                message={message}
+                role={message.role}
+                onClick={() => handleMessageClick(message)}
+              />
+            ) : message.messageType === 'image' ? (
+              <ImageMessage
+                message={message}
+                role={message.role}
+                onClick={() => handleMessageClick(message)}
+              />
+            ) : message.messageType === 'action' ? (
+              <ActionMessage content={message.content} role={message.role} />
+            ) : (
+              <TextMessage content={message.content} role={message.role} />
+            )}
           </div>
         </div>
       ))}

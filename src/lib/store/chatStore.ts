@@ -4,20 +4,17 @@ import { AnalysisResult, ChatMessage, ChatMessageModel } from "../models/ChatMes
 
 interface ChatState {
   messages: ChatMessage[];
-  selectedFile: File | null;
-  fileType: string | null;
+  currentMessage: ChatMessage | null;
   isAnalyzing: boolean;
   analysisResults: AnalysisResult | null;
-  showBrowserWindow: boolean;
-  browserWindowUrl: string;
-  activeTab: string;
   addMessage: (message: ChatMessage) => void;
-  setSelectedFile: (file: File | null, fileType?: string | null) => void;
+  addTextMessage: (content: string, role: "user" | "assistant") => void;
+  addPdfMessage: (content: string, url: string, role: "user" | "assistant") => void;
+  addImageMessage: (content: string, url: string, role: "user" | "assistant") => void;
+  addActionMessage: (content: string, role: "user" | "assistant") => void;
   setIsAnalyzing: (isAnalyzing: boolean) => void;
   setAnalysisResults: (results: AnalysisResult | null) => void;
-  setShowBrowserWindow: (show: boolean) => void;
-  setBrowserWindowUrl: (url: string) => void;
-  setActiveTab: (tab: string) => void;
+  setCurrentMessage: (message: ChatMessage | null) => void;
   reset: () => void;
 }
 
@@ -30,25 +27,71 @@ const initialState = {
       timestamp: Date.now(),
     }),
   ],
-  selectedFile: null,
-  fileType: null,
+  currentMessage: null,
   isAnalyzing: false,
   analysisResults: null,
-  showBrowserWindow: false,
-  browserWindowUrl: "",
-  activeTab: "analysis",
 };
 
 export const useChatStore = create<ChatState>((set) => ({
   ...initialState,
   addMessage: (message) =>
     set((state) => ({ messages: [...state.messages, new ChatMessageModel(message)] })),
-  setSelectedFile: (file, fileType = null) =>
-    set({ selectedFile: file, fileType: fileType || (file ? file.type : null) }),
+  addTextMessage: (content, role) =>
+    set((state) => ({
+      messages: [
+        ...state.messages,
+        new ChatMessageModel({
+          id: crypto.randomUUID(),
+          content,
+          role,
+          timestamp: Date.now(),
+          messageType: "text",
+        }),
+      ],
+    })),
+  addPdfMessage: (content, url, role) =>
+    set((state) => ({
+      messages: [
+        ...state.messages,
+        new ChatMessageModel({
+          id: crypto.randomUUID(),
+          content,
+          role,
+          timestamp: Date.now(),
+          browserUrl: url,
+          messageType: "pdf",
+        }),
+      ],
+    })),
+  addImageMessage: (content, url, role) =>
+    set((state) => ({
+      messages: [
+        ...state.messages,
+        new ChatMessageModel({
+          id: crypto.randomUUID(),
+          content,
+          role,
+          timestamp: Date.now(),
+          browserUrl: url,
+          messageType: "image",
+        }),
+      ],
+    })),
+  addActionMessage: (content, role) =>
+    set((state) => ({
+      messages: [
+        ...state.messages,
+        new ChatMessageModel({
+          id: crypto.randomUUID(),
+          content,
+          role,
+          timestamp: Date.now(),
+          messageType: "action",
+        }),
+      ],
+    })),
   setIsAnalyzing: (isAnalyzing) => set({ isAnalyzing }),
   setAnalysisResults: (results) => set({ analysisResults: results }),
-  setShowBrowserWindow: (show) => set({ showBrowserWindow: show }),
-  setBrowserWindowUrl: (url) => set({ browserWindowUrl: url }),
-  setActiveTab: (tab) => set({ activeTab: tab }),
+  setCurrentMessage: (message) => set({ currentMessage: message }),
   reset: () => set(initialState),
 }));

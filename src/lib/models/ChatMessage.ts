@@ -9,6 +9,7 @@ export interface ChatMessage {
   role: "user" | "assistant";
   timestamp: number;
   browserUrl?: string; // Optional URL to open in browser window when message is displayed
+  messageType?: "text" | "pdf" | "image" | "action"; // Type of message for different rendering and actions
 }
 
 export interface TimeSeriesDataPoint {
@@ -36,12 +37,16 @@ export class ChatMessageModel implements ChatMessage {
   content: string;
   role: "user" | "assistant";
   timestamp: number;
+  browserUrl?: string;
+  messageType?: "text" | "pdf" | "image" | "action";
 
   constructor(data: ChatMessage) {
     this.id = data.id;
     this.content = data.content;
     this.role = data.role;
     this.timestamp = data.timestamp;
+    this.browserUrl = data.browserUrl;
+    this.messageType = data.messageType || "text"; // Default to text if not specified
   }
 
   static validate(data: Partial<ChatMessage>): boolean {
@@ -59,6 +64,8 @@ export class ChatMessageModel implements ChatMessage {
       content: this.content,
       role: this.role,
       timestamp: this.timestamp,
+      browserUrl: this.browserUrl,
+      messageType: this.messageType,
     };
   }
 }

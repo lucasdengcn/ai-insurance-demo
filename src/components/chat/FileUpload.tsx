@@ -2,15 +2,16 @@
 
 import { ChangeEvent, DragEvent, useState } from "react";
 
-import { ChatMessageModel } from "@/lib/models/ChatMessage";
 import { analyzePDF } from "@/lib/services/pdfAnalysis";
 import { useChatStore } from "@/lib/store/chatStore";
 import { useTabsStore } from "@/lib/store/tabsStore";
 
 export function FileUpload() {
   const [isDragging, setIsDragging] = useState(false);
-  const setSelectedFile = useChatStore((state) => state.setSelectedFile);
-  const addMessage = useChatStore((state) => state.addMessage);
+  const addTextMessage = useChatStore((state) => state.addTextMessage);
+  const addPdfMessage = useChatStore((state) => state.addPdfMessage);
+  const addImageMessage = useChatStore((state) => state.addImageMessage);
+  const setCurrentMessage = useChatStore((state) => state.setCurrentMessage);
 
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -25,20 +26,25 @@ export function FileUpload() {
   const displayFile = (file: File) => {
     // Create a URL for the file to display in browser window
     const fileUrl = URL.createObjectURL(file);
-    useChatStore.setState({
-      browserWindowUrl: fileUrl,
-      showBrowserWindow: true
-    });
+    setCurrentMessage({
+      id: crypto.randomUUID(),
+      content: file.name,
+      timestamp: Date.now(),
+      role: "user",
+      messageType: file.type === "application/pdf" ? "pdf" : "image",
+      browserUrl: fileUrl,
+    })
     useTabsStore.setState({ activeTab: "browser" });
   };
 
-  const displayMessage = (message: string) => {
-    addMessage(new ChatMessageModel({
-      id: crypto.randomUUID(),
-      role: "user",
-      content: message,
-      timestamp: Date.now(),
-    }));
+  const displayMessage = (message: string, fileUrl?: string, fileType?: string) => {
+    if (fileType === "application/pdf") {
+      addPdfMessage(message, fileUrl || "", "user");
+    } else if (fileType?.startsWith("image/")) {
+      addImageMessage(message, fileUrl || "", "user");
+    } else {
+      addTextMessage(message, "user");
+    }
   };
 
   const checkFileSize = (file: File) => {
@@ -73,8 +79,8 @@ export function FileUpload() {
   };
 
   const processFile = async (file: File) => {
-    setSelectedFile(file, file.type);
-    displayMessage(`Uploaded file: ${file.name}`);
+    const fileUrl = URL.createObjectURL(file);
+    displayMessage(`Uploaded file: ${file.name}`, fileUrl, file.type);
     displayFile(file);
     if (file.type === "application/pdf") {
       await analyzePDF(file);
