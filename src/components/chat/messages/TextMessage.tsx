@@ -7,7 +7,7 @@ interface TextMessageProps {
 
 export function TextMessage({ content, role }: TextMessageProps) {
   return (
-    <p className="whitespace-pre-wrap break-words">
+    <p className="whitespace-pre-wrap break-words" data-role={role}>
       {content}
     </p>
   );
