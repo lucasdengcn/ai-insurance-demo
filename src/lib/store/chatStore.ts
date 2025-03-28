@@ -7,10 +7,16 @@ interface ChatState {
   selectedFile: File | null;
   isAnalyzing: boolean;
   analysisResults: AnalysisResult | null;
+  showBrowserWindow: boolean;
+  browserWindowUrl: string;
+  activeTab: string;
   addMessage: (message: ChatMessage) => void;
   setSelectedFile: (file: File | null) => void;
   setIsAnalyzing: (isAnalyzing: boolean) => void;
   setAnalysisResults: (results: AnalysisResult | null) => void;
+  setShowBrowserWindow: (show: boolean) => void;
+  setBrowserWindowUrl: (url: string) => void;
+  setActiveTab: (tab: string) => void;
   reset: () => void;
 }
 
@@ -26,6 +32,9 @@ const initialState = {
   selectedFile: null,
   isAnalyzing: false,
   analysisResults: null,
+  showBrowserWindow: false,
+  browserWindowUrl: "",
+  activeTab: "analysis",
 };
 
 export const useChatStore = create<ChatState>((set) => ({
@@ -35,5 +44,8 @@ export const useChatStore = create<ChatState>((set) => ({
   setSelectedFile: (file) => set({ selectedFile: file }),
   setIsAnalyzing: (isAnalyzing) => set({ isAnalyzing }),
   setAnalysisResults: (results) => set({ analysisResults: results }),
+  setShowBrowserWindow: (show) => set({ showBrowserWindow: show }),
+  setBrowserWindowUrl: (url) => set({ browserWindowUrl: url }),
+  setActiveTab: (tab) => set({ activeTab: tab }),
   reset: () => set(initialState),
 }));

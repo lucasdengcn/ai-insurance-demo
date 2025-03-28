@@ -8,6 +8,7 @@ export interface ChatMessage {
   content: string;
   role: "user" | "assistant";
   timestamp: number;
+  browserUrl?: string; // Optional URL to open in browser window when message is displayed
 }
 
 export interface TimeSeriesDataPoint {
