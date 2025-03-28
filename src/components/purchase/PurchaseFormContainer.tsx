@@ -7,7 +7,7 @@ interface PurchaseFormContainerProps {
 
 export default function PurchaseFormContainer({ children, title = 'Purchase Insurance' }: PurchaseFormContainerProps) {
   return (
-    <div className="max-w-2xl mx-auto py-8 px-4">
+    <div className="w-full mx-auto py-8 px-4">
       <div className="mb-8">
         <h1 className="text-2xl font-bold mb-4">{title}</h1>
       </div>
