@@ -66,7 +66,7 @@ export default function SelectPlanPage() {
   return (
     <PurchaseFormContainer>
       <PurchaseStepper currentStep={2} />
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-6" role="form">
         <div className="grid gap-6">
           {insurancePlans.map((plan) => (
             <div

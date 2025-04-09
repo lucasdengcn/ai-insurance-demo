@@ -43,7 +43,7 @@ export default function PaymentPage() {
   return (
     <PurchaseFormContainer>
       <PurchaseStepper currentStep={3} />
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-6" role="form">
         <div>
           <h3 className="text-lg font-medium mb-4">Select Payment Method</h3>
           <div className="grid gap-4">

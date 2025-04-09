@@ -44,7 +44,7 @@ export default function PhoneVerificationPage() {
   return (
     <PurchaseFormContainer>
       <PurchaseStepper currentStep={0} />
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4" role="form">
         <div>
           <label className="block text-sm font-medium mb-2">Phone Number</label>
           <input

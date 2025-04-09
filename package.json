@@ -6,7 +6,9 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.0.15",
@@ -18,20 +20,26 @@
     "react-pdf": "^9.2.1",
     "recharts": "^2.15.1",
     "tailwindcss": "^4.0.15",
-    "zustand": "^5.0.3",
-    "ws": "^8.16.0"
+    "ws": "^8.16.0",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/jest": "^29.5.14",
     "@types/node": "^20.10.6",
     "@types/react": "^18.2.46",
     "@types/react-dom": "^18.2.18",
     "@types/ws": "^8.5.10",
-    "ts-node": "^10.9.2",
     "autoprefixer": "^10.4.21",
     "eslint": "^8.56.0",
     "eslint-config-next": "15.2.3",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
     "prettier": "^3.1.1",
     "prettier-plugin-tailwindcss": "^0.5.10",
+    "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   }
 }

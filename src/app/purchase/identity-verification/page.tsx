@@ -42,7 +42,7 @@ export default function IdentityVerificationPage() {
   return (
     <PurchaseFormContainer>
       <PurchaseStepper currentStep={1} />
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4" role="form">
         <div>
           <label className="block text-sm font-medium mb-2">Full Name</label>
           <input

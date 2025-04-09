@@ -95,7 +95,7 @@ export default function ClaimsPage() {
           ))}
         </div>
 
-        <form onSubmit={handleSubmit} className="mt-8 space-y-6 bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
+        <form onSubmit={handleSubmit} className="mt-8 space-y-6 bg-white dark:bg-gray-800 p-6 rounded-lg shadow" role="form">
           {/* Step 1: Basic Information */}
           {currentStep === 1 && (
             <div className="space-y-4">
@@ -153,7 +153,7 @@ export default function ClaimsPage() {
             <div className="space-y-4">
               <div>
                 <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Incident Description
+                  Description
                 </label>
                 <textarea
                   id="description"
